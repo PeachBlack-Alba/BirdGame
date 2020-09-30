@@ -1,12 +1,14 @@
 import 'dart:math' as math;
 import 'package:flame/components/animation_component.dart';
 import 'package:flame/components/mixins/resizable.dart';
+import 'package:flame/components/mixins/tapable.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/anchor.dart';
 import 'package:flame/components/component.dart';
+import 'package:flame/gestures.dart';
 
 
 const COLOR = const Color(0xFF75DA8B);
@@ -58,10 +60,11 @@ class Bird extends AnimationComponent with Resizable{
   reset () {
     this.x = size.width/ 2;
     this.y = size.height/2;
-    speedY = 0;
-    frozen = true;
-    angle = 0.0;
+    this.speedY = 0;
+    this.frozen = true;
+    this.angle = 0.0;
   }
+
 
   @override
   void resize(Size size) {
@@ -86,17 +89,19 @@ class Bird extends AnimationComponent with Resizable{
       reset();
     }
   }
-    onTap() {
-      if (frozen) {
-        frozen = false;
-        return;
-      };
-       speedY = (speedY + BOOST).clamp(BOOST, speedY);
-    }
+  onTap() {
+    if (this.frozen) {
+      this.frozen = false;
+      return;
+    };
+    print('pasa');
+    this.speedY = (this.speedY + BOOST).clamp(BOOST, this.speedY);
+  }
+
 }
 
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with TapDetector{
   Bird bird;
   MyGame (Size size){
     add(Bg());
@@ -105,5 +110,8 @@ class MyGame extends BaseGame {
   @override
   void onTap() {
     bird.onTap();
+   // print("tap up");
   }
+
+
 }
