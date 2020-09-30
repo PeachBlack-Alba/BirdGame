@@ -1,6 +1,4 @@
 import 'dart:math' as math;
-
-
 import 'package:flame/components/animation_component.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/flame.dart';
@@ -20,7 +18,14 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized ();
   final size = await Flame.util.initialDimensions();
   final game = MyGame(size);
-  runApp(game.widget);
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: game.widget,
+      ),
+    )
+  );
 }
 
 // Resizable will resize the with and height of the background component depending on the size of the mobile
@@ -32,8 +37,7 @@ class Bg extends Component with Resizable{
   }
 
   @override
-  void update(double t) {
-  }
+  void update(double t) {}
 
 }
 
@@ -61,7 +65,7 @@ class Bird extends AnimationComponent with Resizable{
 
   @override
   void resize(Size size) {
-    // everytime updates resizes
+    // every time updates resize
     super.resize(size);
     reset();
   }
@@ -73,6 +77,7 @@ class Bird extends AnimationComponent with Resizable{
     super.update(t);
     // when its frozen we just return and do nothing. We need onTap for the bird to move
     if (frozen) return;
+    // bird falls on constant acceleration which is gravity function
     this.y += speedY * t - GRAVITY * t * t / 2;
     this.speedY += GRAVITY * t;
     this.angle = velocity.angle();
@@ -81,19 +86,17 @@ class Bird extends AnimationComponent with Resizable{
       reset();
     }
   }
-  onTap () {
-    if (frozen) {
-      frozen = false;
-      return;
+    onTap() {
+      if (frozen) {
+        frozen = false;
+        return;
+      };
+       speedY = (speedY + BOOST).clamp(BOOST, speedY);
     }
-    speedY = (speedY + BOOST).clamp(BOOST, speedY);
-  }
-
 }
 
 
 class MyGame extends BaseGame {
-
   Bird bird;
   MyGame (Size size){
     add(Bg());
