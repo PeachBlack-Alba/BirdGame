@@ -110,8 +110,6 @@ class MyGame extends BaseGame with TapDetector{
   @override
   void onTap() {
     bird.onTap();
-   // print("tap up");
+    print("tap up");
   }
-
-
 }
