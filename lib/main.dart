@@ -61,7 +61,7 @@ class Bird extends AnimationComponent with Resizable{
     this.x = size.width/ 2;
     this.y = size.height/2;
     this.speedY = 0;
-    this.frozen = true;
+    this.frozen = false;
     this.angle = 0.0;
   }
 
